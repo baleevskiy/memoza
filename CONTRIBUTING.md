@@ -73,7 +73,7 @@ Check the output of `git log --oneline files_that_you_changed` to find out what 
 
 Aim to make your commits atomic. Think in a way that if specific commit gets reverted system should continue to work fine.
 
-Consider squashing your commits if you have too many of them. Check one of the guides about interactive git rebase [here](https://help.github.com/articles/about-git-rebase/) or [here](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html). Motivation for that is it's easier to troubleshoot issues (just revert problematic commit), easier to read history, easier/faster to run `git bisect`.
+Consider squashing your commits if you have too many of them. Check one of the guides about interactive git rebase [here](https://help.github.com/articles/about-git-rebase/) or [here](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html). Motivation for that is it's easier to troubleshoot issues (just revert problematic commit), easier to read history, easier/faster to run `git bisect`. You can also squash your commits using native Github feature as explained here: [Squash your commits](https://github.com/blog/2141-squash-your-commits).
 
 
 ### Step 4: Rebase
