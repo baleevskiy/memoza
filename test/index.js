@@ -1,5 +1,5 @@
 const assert = require('assert');
-const lib = require('../lib');
+const lib = require('../src');
 
 describe('lib', () => {
   it('should', () => {
