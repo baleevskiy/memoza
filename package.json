@@ -22,8 +22,9 @@
   "dependencies": {},
   "devDependencies": {
     "eslint": "^3.4.0",
-    "eslint-config-airbnb": "^10.0.1",
-    "eslint-plugin-react": "^6.2.0",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.14.0",
+    "github-publish-release": "^1.2.3",
     "github-publish-release": "^1.2.3",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2"
