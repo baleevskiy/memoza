@@ -4,7 +4,7 @@
   "description": "",
   "author": "org",
   "license": "UNLICENSED",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/org/repo.git"
@@ -30,6 +30,6 @@
     "mocha": "^3.0.2"
   },
   "engines": {
-    "node": "^4.2"
+    "node": "^6.2"
   }
 }
