@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cbw": "^0.0.1",
+    "fs-promise": "^2.0.1",
     "lodash": "^4.17.4",
     "node-serialize": "^0.0.4",
     "sinon": "^2.1.0"
