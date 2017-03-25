@@ -4,7 +4,7 @@ const fsp = require('fs-promise');
 const fs = require('fs');
 const Cache = require('../lib/cache');
 
-describe.only('cache', () => {
+describe('cache', () => {
   let writableDirname;
 
   before((done) => {
@@ -46,7 +46,7 @@ describe.only('cache', () => {
   it('should set and get', (done) => {
     const cache = new Cache({path: writableDirname})
     const cacheKey = 'some_file';
-    const sampleData = {data: 'data', foo: [1,2,3]};
+    const sampleData = {data: 'data', foo: [1, 2, 3]};
     cache.set(cacheKey, sampleData)
       .then(() => {
         return cache.get(cacheKey)
