@@ -58,8 +58,37 @@ describe('lib', () => {
     });
   });
 
+  it('should not set cbParams if we do not pass a callback', () => {
+    const sp = sandbox.spy(cache.prototype, 'set');
+    const memozedFunction = memoza(() => {});
+    return memozedFunction('test').then(() => {
+      assert(sp.calledOnce);
+      assert.deepEqual(sp.getCalls()[0].args[1], { cbArgs: null, promiseResolveArg: null });
+    });
+  });
 
-  it('should not call set cache before all promises get resolved', () => {
 
+  it('should set promiseResolveArg if we pass a Promise', () => {
+    const sp = sandbox.spy(cache.prototype, 'set');
+    const memozedFunction = memoza(() => Promise.resolve(12345));
+    return memozedFunction('test3').then(() => {
+      assert(sp.calledOnce);
+      assert.deepEqual(sp.getCalls()[0].args[1], { cbArgs: null, promiseResolveArg: 12345 });
+    });
+  });
+
+  it('should not mimic functions cb if there is no one', () => {
+    const memozedFunction = memoza(() => Promise.resolve(12345));
+    return memozedFunction('test4')
+      .then(() => memozedFunction('test4').then((result) => {
+        assert.equal(result, 12345);
+      }));
+  });
+
+  it('should set __memoza attr to the function', () => {
+    const func = () => {};
+    memoza(func);
+    memoza(func);
+    assert(func.__memoza !== undefined);
   });
 });
