@@ -1,9 +1,19 @@
 const assert = require('assert');
 const fsp = require('fs-promise');
+const sinon = require('sinon');
 const Cache = require('../lib/cache');
 
 describe('cache', () => {
   let writableDirname;
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
 
   before(() => {
     writableDirname = `${__dirname}/fixtures`;
@@ -35,5 +45,18 @@ describe('cache', () => {
         assert.deepEqual(object, sampleData);
         return fsp.remove(cache.cachePath(cacheKey));
       });
+  });
+
+  it('should call emptyDir on invalidate cache', () => {
+    sandbox.spy(fsp, 'emptyDir');
+    return new Cache({ path: 'ttt' })
+      .invalidate()
+      .then(() => {
+        assert(fsp.emptyDir.calledOnce);
+      });
+  });
+
+  it('should throw an exception if path not peovided', () => {
+    assert.throws(() => new Cache({}));
   });
 });
