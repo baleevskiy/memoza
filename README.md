@@ -9,7 +9,7 @@ store the results on the filesystem or any other cache which provides
  1. Remembers cb's arguments
  ```javascript
  const func = (param1, cb) => {
-     setTimeout(() => { cb(param1); }, 10000);
+  setTimeout(() => { cb(param1); }, 10000);
  }
  const wrapped = memoza(func);
  wrapped(1234, (param) => console.log(param)); //will log "1234" in 10 seconds
@@ -19,3 +19,14 @@ store the results on the filesystem or any other cache which provides
 
  2. Remembers Promise resolution value
 
+ ```javascript
+const func = (param1) => {
+  return new Promise((resolve) => {
+    setTimeout(() => { resolve(param1); }, 10000);
+  });
+ }
+ const wrapped = memoza(func);
+ wrapped(1234).then((param) => console.log(param)); //will log "1234" in 10 seconds
+ // ...once promise resolved
+ wrapped(1234).then((param) => console.log(param)); //will log "1234" without delay
+ ```
