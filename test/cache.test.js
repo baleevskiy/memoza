@@ -47,12 +47,12 @@ describe('cache', () => {
       });
   });
 
-  it('should call emptyDir on invalidate cache', () => {
-    sandbox.spy(fsp, 'emptyDir');
-    return new Cache({ path: 'ttt' })
-      .invalidate()
+  it('should call readdir on keys', () => {
+    sandbox.spy(fsp, 'readdir');
+    return new Cache({ path: 'test/fixtures' })
+      .keys()
       .then(() => {
-        assert(fsp.emptyDir.calledOnce);
+        assert(fsp.readdir.calledOnce);
       });
   });
 
