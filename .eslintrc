@@ -7,10 +7,13 @@
   "globals": {},
   "plugins": ["jsdoc", "json"],
   "rules": {
+    "no-underscore-dangle": ["error", {
+      "allow": ["__memoza"],
+    }],
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
-      "functions": "never", # Node 6 doesn't like `(function(a,\n){ })(b,);`
+      "functions": "never",
     }],
     "id-length": ["error", {"min": 2, "properties": "never", "exceptions": ["_", "i", "j"]}],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
