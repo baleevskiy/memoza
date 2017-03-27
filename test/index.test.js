@@ -1,10 +1,15 @@
 const _ = require('lodash');
 const assert = require('assert');
+const fsp = require('fs-promise');
 const sinon = require('sinon');
+const cache = require('../lib/cache');
 const lib = require('../lib');
 
-describe.only('lib', () => {
+describe('lib', () => {
   let sandbox;
+  const fixturesDirectory = __dirname+'/fixtures';
+
+  const memoza = lib({ path: fixturesDirectory });
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -14,17 +19,23 @@ describe.only('lib', () => {
     sandbox.restore();
   });
 
-  it('should', () => {
-    const config = {
-      path: __dirname+'/fixtures'
-    };
-    const memoza = lib(config);
+  after(() => {
+    return fsp.emptyDir(fixturesDirectory)
+  });
+
+  it('should call function', () => {
+
+    const cacheKeyFilename = `${fixturesDirectory}/test2.json`;
+    sandbox.stub(cache.prototype, 'cachePath').returns(cacheKeyFilename);
+    const functionSpy = sandbox.spy();
+    const promiseSpy = sandbox.spy();
 
     const f = memoza((a,b,cb) => {
-      setTimeout(() => cb(a-b,a,b), 2000);
-
+      functionSpy(a,b);
+      setTimeout(() => cb(a-b,a,b), 20);
       return new Promise(res => {
-        setTimeout(() => res(a+b), 3000);
+        promiseSpy(a,b);
+        setTimeout(() => res(a+b), 30);
       });
     });
     let cbResolver;
@@ -33,18 +44,27 @@ describe.only('lib', () => {
     });
 
     const funcPromise = f(5, 8, (diff, a, b) => {
-      console.log('diff, a, b', diff, a, b);
-      assert.equal(diff, -3);
-      assert.equal(a, 5);
-      assert.equal(b, 8);
-      cbResolver();
+      assert.deepEqual([diff,a ,b ], [-3, 5, 8]);
     }).then((sum) => {
-      console.log('sum', sum);
       assert.equal(sum, 13);
-      console.log('sum', sum);
+      //call the function again to check whether we do not call function anymore
+      return f(5, 8, (diff, a, b) => {
+        assert.deepEqual([diff,a ,b ], [-3, 5, 8]);
+        cbResolver();
+      }).then((sum) => {
+        assert.equal(sum, 13);
+      })
     });
 
-    return Promise.all([funcPromise, cbPromise]);
+    return Promise.all([funcPromise, cbPromise]).then(() => {
+      assert(functionSpy.calledOnce);
+      assert(promiseSpy.calledOnce);
+    });
+
+  });
+
+
+  it('should not call set cache before all promises get resolved', () => {
 
   });
 });

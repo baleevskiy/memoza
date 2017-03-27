@@ -4,50 +4,40 @@ const fsp = require('fs-promise');
 const fs = require('fs');
 const Cache = require('../lib/cache');
 
-describe('cache', () => {
+describe.only('cache', () => {
   let writableDirname;
 
-  before((done) => {
+  before(() => {
     writableDirname = __dirname+'/fixtures';
-    fs.mkdir(writableDirname, () => {
-      fsp.writeFile(`${writableDirname}/test.json`, '{"test": 123.45"}')
-        .then(() => { done() }, done);
-    });
+    return fsp.writeFile(`${writableDirname}/test.json`, '{"test": 123.45"}');
   });
 
-  after((done) => {
-    fsp.remove(`${writableDirname}/test.json`)
-      .then(() => {
-        fs.rmdir(writableDirname, done);
-      })
+  after(() => {
+    return fsp.emptyDir(writableDirname);
   });
 
-  it('should reject on bad dirname', (done) => {
-    new Cache({path: __dirname+'/bad'})
+  it('should reject on bad dirname', () => {
+    return new Cache({path: __dirname+'/bad'})
       .check()
-      .then(() => { done('should not happen');})
       .catch((err) => {
         assert(err.message.includes('no such file or directory'));
-        done();
       })
-      .catch(done);
   });
 
-  it('should resolve on good dirname', (done) => {
-    new Cache({path: writableDirname})
-      .check()
-      .then(done, done);
+  it('should resolve on good dirname', () => {
+    return new Cache({path: writableDirname }).check()
   });
 
   it('should give proper cachePath', () => {
     assert.equal(new Cache({path: writableDirname}).cachePath('test'), `${writableDirname}/test.json`);
   });
 
-  it('should set and get', (done) => {
-    const cache = new Cache({path: writableDirname})
+  it('should set and get', () => {
     const cacheKey = 'some_file';
     const sampleData = {data: 'data', foo: [1, 2, 3]};
-    cache.set(cacheKey, sampleData)
+    const cache = new Cache({path: writableDirname});
+    return cache
+      .set(cacheKey, sampleData)
       .then(() => {
         return cache.get(cacheKey)
       })
@@ -55,7 +45,5 @@ describe('cache', () => {
         assert.deepEqual(object, sampleData);
         return fsp.remove(cache.cachePath(cacheKey));
       })
-      .then(done)
-      .catch(done)
   });
 });
