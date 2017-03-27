@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const cache = require('../lib/cache');
 const lib = require('../lib');
 
-describe.only('lib', () => {
+describe('lib', () => {
   let sandbox;
   const fixturesDirectory = `${__dirname}/fixtures`;
 
