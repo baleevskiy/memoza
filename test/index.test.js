@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const assert = require('assert');
 const fsp = require('fs-promise');
 const sinon = require('sinon');
@@ -75,6 +76,21 @@ describe('lib', () => {
       assert(sp.calledOnce);
       assert.deepEqual(sp.getCalls()[0].args[1], { cbArgs: null, promiseResolveArg: 12345 });
     });
+  });
+
+  it('should call remove when invalidate cache', () => {
+    const memozedFunction = memoza(info => Promise.resolve(info));
+    const keys = ['foo', 'bar', 'baz'];
+    sandbox.stub(cache.prototype, 'keys').callsFake(() => Promise.resolve(keys));
+    const fspMock = sandbox.mock(fsp);
+    _.forEach(keys, (item) => {
+      fspMock.expects('remove').once().withExactArgs(`${fixturesDirectory}/${item}.json`);
+    });
+
+    return memozedFunction.invalidate_cache()
+      .then(() => {
+        fspMock.verify();
+      });
   });
 
   it('should not mimic functions cb if there is no one', () => {

@@ -56,6 +56,15 @@ describe('cache', () => {
       });
   });
 
+  it('should call readdir on keys', () => {
+    sandbox.spy(fsp, 'remove');
+    return new Cache({ path: 'test/fixtures' })
+      .set('asd', null)
+      .then(() => {
+        assert(fsp.remove.calledOnce);
+      });
+  });
+
   it('should throw an exception if path not peovided', () => {
     assert.throws(() => new Cache({}));
   });
