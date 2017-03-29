@@ -107,4 +107,29 @@ describe('lib', () => {
     memoza(func);
     assert(func.__memoza !== undefined);
   });
+
+  it('should get, set, remove, and clear contexts', () => {
+    assert.equal(lib.getContext(), '');
+    lib.setContext('one');
+    lib.setContext('two');
+    lib.setContext('context three');
+    assert.equal(lib.getContext(), 'one::two::context-three::');
+    lib.removeContext();
+    assert.equal(lib.getContext(), 'one::two::');
+    lib.clearContext();
+    assert.equal(lib.getContext(), '');
+  });
+
+  it('should return isRecording true when recording', (done) => {
+    // reject mean we do not have it in cache and need to start recording
+    sandbox.stub(cache.prototype, 'get').returns(Promise.reject());
+    assert.equal(lib.isRecording(), false);
+    // create a function which returns a promise which never gets resolved
+    // so we'll remain in recording state
+    memoza(() => new Promise(() => {}))();
+    setTimeout(() => {
+      assert(lib.isRecording());
+      done();
+    }, 1);
+  });
 });
