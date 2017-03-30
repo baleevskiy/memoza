@@ -59,23 +59,51 @@ describe('lib', () => {
     });
   });
 
-  it('should not set cbParams if we do not pass a callback', () => {
+  it('should set promise resolved to memozaData', () => {
     const sp = sandbox.spy(cache.prototype, 'set');
-    const memozedFunction = memoza(() => {});
+    const memozedFunction = memoza(() => Promise.resolve(1));
     return memozedFunction('test').then(() => {
       assert(sp.calledOnce);
-      assert.deepEqual(sp.getCalls()[0].args[1], { cbArgs: null, promiseResolveArg: null });
+      assert.deepEqual(sp.getCalls()[0].args[1], {
+        cbArgs: null,
+        promise: 'resolve',
+        promiseArg: 1,
+        funcReturn: null,
+      });
     });
   });
 
-
-  it('should set promiseResolveArg if we pass a Promise', () => {
+  it('should set promise rejected to memozaData', () => {
     const sp = sandbox.spy(cache.prototype, 'set');
-    const memozedFunction = memoza(() => Promise.resolve(12345));
-    return memozedFunction('test3').then(() => {
+    const memozedFunction = memoza(() => Promise.reject(1));
+    return memozedFunction('test-CATCH').catch(() => {
       assert(sp.calledOnce);
-      assert.deepEqual(sp.getCalls()[0].args[1], { cbArgs: null, promiseResolveArg: 12345 });
+      assert.deepEqual(sp.getCalls()[0].args[1], {
+        cbArgs: null,
+        promise: 'reject',
+        promiseArg: 1,
+        funcReturn: null,
+      });
     });
+  });
+
+  it('should cache sync functions without cb', (done) => {
+    const functionSpy = sandbox.spy();
+    const memozedFunction = memoza((data) => { functionSpy(data); return data; });
+    _.times(10, () => assert.equal(memozedFunction('foo'), 'foo'));
+
+    setTimeout(() => {
+      assert.equal(memozedFunction('foo'), 'foo');
+      assert.equal(functionSpy.callCount, 1);
+      done();
+    }, 10);
+  });
+
+  it('should return the same promise when first is Pending', () => {
+    let resolver;
+    const memozedFunction = memoza(() => new Promise((res) => { resolver = res; }));
+    assert.equal(memozedFunction('p1'), memozedFunction('p1'));
+    resolver();
   });
 
   it('should call remove when invalidate cache', () => {
@@ -122,7 +150,7 @@ describe('lib', () => {
 
   it('should return isRecording true when recording', (done) => {
     // reject mean we do not have it in cache and need to start recording
-    sandbox.stub(cache.prototype, 'get').returns(Promise.reject());
+    sandbox.stub(cache.prototype, 'get').returns(null);
     assert.equal(lib.isRecording(), false);
     // create a function which returns a promise which never gets resolved
     // so we'll remain in recording state

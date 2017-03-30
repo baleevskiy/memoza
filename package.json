@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cbw": "^0.0.1",
+    "fs-extra": "^2.1.2",
     "fs-promise": "^2.0.2",
     "jsonfile": "^2.4.0",
     "lodash": "^4.17.4",
