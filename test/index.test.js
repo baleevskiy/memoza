@@ -138,13 +138,19 @@ describe('lib', () => {
 
   it('should get, set, remove, and clear contexts', () => {
     assert.equal(lib.getContext(), '');
-    lib.setContext('one');
-    lib.setContext('two');
+    const ctx = lib.setContext('one');
+    const ctxTwo = lib.setContext('two');
     lib.setContext('context three');
+    lib.setContext('context four');
+    lib.unsetContext();
+    assert.equal(lib.getContext(), 'one::two::context-three::context-four::');
+    lib.unsetContext('context four');
     assert.equal(lib.getContext(), 'one::two::context-three::');
-    lib.removeContext();
-    assert.equal(lib.getContext(), 'one::two::');
-    lib.clearContext();
+    lib.unsetContext('foo context');
+    assert.equal(lib.getContext(), 'one::two::context-three::');
+    lib.unsetContext(ctxTwo);
+    assert.equal(lib.getContext(), 'one::');
+    lib.unsetContext(ctx);
     assert.equal(lib.getContext(), '');
   });
 
