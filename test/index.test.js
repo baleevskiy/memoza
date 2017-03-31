@@ -20,7 +20,7 @@ describe('lib', () => {
     sandbox.restore();
   });
 
-  after((done) => rimraf(`${fixturesDirectory}/*.json`, done));
+  after(done => rimraf(`${fixturesDirectory}/*.json`, done));
 
   it('should call function', () => {
     const cacheKeyFilename = `${fixturesDirectory}/test2.json`;

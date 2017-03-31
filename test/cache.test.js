@@ -16,7 +16,7 @@ describe('cache', () => {
     sandbox.restore();
   });
 
-  after((done) => rimraf(`${fixturesDirectory}/*.json`, done));
+  after(done => rimraf(`${fixturesDirectory}/*.json`, done));
 
   it('should reject on bad dirname', () => new Cache({ path: `${__dirname}/bad` })
       .check()
