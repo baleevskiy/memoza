@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const assert = require('assert');
 const fsp = require('fs-promise');
+const rimraf = require('rimraf');
 const sinon = require('sinon');
 const cache = require('../lib/cache');
 const lib = require('../lib');
@@ -19,7 +20,7 @@ describe('lib', () => {
     sandbox.restore();
   });
 
-  after(() => fsp.emptyDir(fixturesDirectory));
+  after((done) => rimraf(`${fixturesDirectory}/*.json`, done));
 
   it('should call function', () => {
     const cacheKeyFilename = `${fixturesDirectory}/test2.json`;

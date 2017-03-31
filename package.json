@@ -26,6 +26,7 @@
     "jsonfile": "^2.4.0",
     "lodash": "^4.17.4",
     "node-serialize": "^0.0.4",
+    "rimraf": "^2.6.1",
     "sinon": "^2.1.0"
   },
   "devDependencies": {
