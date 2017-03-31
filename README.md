@@ -1,5 +1,7 @@
 # Memoza
 [![Build Status](https://travis-ci.org/baleevskiy/memoza.svg?branch=master)](https://travis-ci.org/baleevskiy/memoza)
+[![Code Climate](https://codeclimate.com/github/baleevskiy/memoza/badges/gpa.svg)](https://codeclimate.com/github/baleevskiy/memoza)
+[![Test Coverage](https://codeclimate.com/github/baleevskiy/memoza/badges/coverage.svg)](https://codeclimate.com/github/baleevskiy/memoza/coverage)
 ### Description
 
 Like `_.memoize` this one allows to cache functions and
