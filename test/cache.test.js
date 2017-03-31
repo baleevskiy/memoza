@@ -17,7 +17,6 @@ describe('cache', () => {
 
   before(() => {
     writableDirname = `${__dirname}/fixtures`;
-    return fsp.writeFile(`${writableDirname}/test.json`, '{"test": 123.45"}');
   });
 
   after(() => fsp.emptyDir(writableDirname));
