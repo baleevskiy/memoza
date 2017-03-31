@@ -1,10 +1,9 @@
 # Memoza
-
+[![Build Status](https://travis-ci.org/baleevskiy/memoza.svg?branch=master)](https://travis-ci.org/baleevskiy/memoza)
 ### Description
 
 Like `_.memoize` this one allows to cache functions and
-store the results on the filesystem or any other cache which provides
- `.get(key)`, `.set(key, data)` methods.
+stores the results in FS.
 
 ### Configuration
 ```javascript
