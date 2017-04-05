@@ -95,16 +95,9 @@ describe('lib', () => {
 
     setTimeout(() => {
       assert.equal(memozedFunction('foo'), 'foo');
-      assert.equal(functionSpy.callCount, 1);
+      assert.equal(functionSpy.callCount, 10);
       done();
     }, 10);
-  });
-
-  it('should return the same promise when first is Pending', () => {
-    let resolver;
-    const memozedFunction = memoza(() => new Promise((res) => { resolver = res; }));
-    assert.equal(memozedFunction('p1'), memozedFunction('p1'));
-    resolver();
   });
 
   it('should call remove when invalidate cache', () => {
