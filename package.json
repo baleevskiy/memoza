@@ -1,6 +1,6 @@
 {
   "name": "node-memoza",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Function memoise",
   "author": "baleevskiy",
   "license": "MIT",
@@ -40,6 +40,6 @@
     "mocha": "^3.0.2"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 6.2"
   }
 }
