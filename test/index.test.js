@@ -160,4 +160,21 @@ describe('lib', () => {
       done();
     }, 1);
   });
+
+  it('should toggle caching properly', async () => {
+    const getDate = () => new Date();
+    const memozedFunction = memoza(() => getDate)();
+
+    // Expect that memoza will start enabled
+    const cachedDate = memozedFunction();
+    assert.strictEqual(memozedFunction(), cachedDate);
+
+    // After disabling, the function should not be responding from cache
+    lib.disable();
+    assert.notStrictEqual(memozedFunction(), cachedDate);
+
+    // After enabling again, we should hit the original cache again
+    lib.enable();
+    assert.strictEqual(memozedFunction(), cachedDate);
+  });
 });
